@@ -107,5 +107,4 @@ df = df.sample(frac=1).reset_index(drop=True)
 # Return a csv file with the dataframe
 df.to_csv('data/brain_tumor_dataset.csv')
 
-# Print dataframe
-df
+print('Ready')
