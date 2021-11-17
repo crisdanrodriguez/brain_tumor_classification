@@ -5,7 +5,7 @@ import numpy as np
 from skimage import io
 from skimage.io import imread
 from skimage.feature import greycomatrix, greycoprops
-from scipy.stats import kurtosis, skew
+from scipy.stats import kurtosis, skew, entropy
 
 
 # Function for image features extraction
@@ -32,9 +32,10 @@ def features_extraction(image_path):
     # Converts the 2-dimensional pixels array into 1-dimensional
     image_1da = image.flatten()
     
-    # Calculate the skewness and kurtosis of the 1-dimensional array with scipy.stats functions
+    # Calculate the skewness, kurtosis and entropy of the 1-dimensional array with scipy.stats functions
     skewness = skew(image_1da)
     kurtos = kurtosis(image_1da)
+    entro = entropy(image_1da, base = 2)
 
     # Calculate the grey-level-co-ocurrence matrix with skimage functions
     # The pixel pair distance offset used is 1
@@ -50,7 +51,7 @@ def features_extraction(image_path):
     correlation = greycoprops(GLCM, 'correlation')[0, 0]
     
     # Returns all the features values of the image
-    return mean, variance, std, skewness, kurtos, contrast, dissimilarity, homogeneity, asm, energy, correlation
+    return mean, variance, std, skewness, kurtos, entro, contrast, dissimilarity, homogeneity, asm, energy, correlation
 
 
 # Function for labeling classes with numerical value
@@ -77,7 +78,7 @@ def label_class(row):
 images_dir = './data/Training'
 
 # Create a dataframe to store the values of the features of each image
-df = pd.DataFrame(columns = ('image_name', 'mean', 'variance', 'std', 'skewness', 'kurtosis','contrast', 'dissimilarity', 'homogeneity', 'asm', 'energy', 'correlation', 'class_name'))
+df = pd.DataFrame(columns = ('image_name', 'mean', 'variance', 'std', 'skewness', 'kurtosis', 'entropy','contrast', 'dissimilarity', 'homogeneity', 'asm', 'energy', 'correlation', 'class_name'))
 
 # A variable to iterate with
 image_num = 1
@@ -91,10 +92,10 @@ for classes in os.listdir(images_dir):
         features = features_extraction(inputfile)
         
         # Assign each feature value into its variable
-        (mean, variance, std, skewness, kurtos, contrast, dissimilarity, homogeneity, asm, energy, correlation) = features
+        (mean, variance, std, skewness, kurtos, entro,contrast, dissimilarity, homogeneity, asm, energy, correlation) = features
         
         # Add each image feature value into the dataframe
-        df.loc[image_num] = images, mean, variance, std, skewness, kurtos, contrast, dissimilarity, homogeneity, asm, energy, correlation, classes
+        df.loc[image_num] = images, mean, variance, std, skewness, kurtos, entro, contrast, dissimilarity, homogeneity, asm, energy, correlation, classes
         
         image_num += 1
 
