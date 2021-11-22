@@ -4,23 +4,18 @@ import pandas as pd
 import numpy as np
 from skimage import io
 from skimage.io import imread
+from skimage.transform import resize
+from skimage.transform import resize
 from skimage.feature import greycomatrix, greycoprops
 from scipy.stats import kurtosis, skew, entropy
 
 
-# Function for image features extraction
-def features_extraction(image_path):
-    """Get an image and returns first and second order features of the pixels array 
-
-    Args:
-        image_path (str): The file location of the image
-
-    Returns:
-        tuple: A tuple with the values of each feature
-    """
-
+# Get an image and returns first and second order features of the pixels array 
+def get_image_features(image_path):
     # Load the image and converts it into a 2-dimensional numpy array with the pixels values
     image = io.imread(image_path, as_gray = True) * 255
+    # Resize image to 512 x 512
+    image = resize(image, (512, 512))
     # Converts the float values of the 2-dimensional pixels array into uint8
     image = image.astype(np.uint8)
     
@@ -35,7 +30,7 @@ def features_extraction(image_path):
     # Calculate the skewness, kurtosis and entropy of the 1-dimensional array with scipy.stats functions
     skewness = skew(image_1da)
     kurtos = kurtosis(image_1da)
-    entro = entropy(image_1da, base = 2)
+    entro = entropy(image_1da)
 
     # Calculate the grey-level-co-ocurrence matrix with skimage functions
     # The pixel pair distance offset used is 1
@@ -54,21 +49,13 @@ def features_extraction(image_path):
     return mean, variance, std, skewness, kurtos, entro, contrast, dissimilarity, homogeneity, asm, energy, correlation
 
 
-# Function for labeling classes with numerical value
+# Gets the categorical value and assign it to a numeric value between 0 and 3
 def label_class(row):
-    """Gets the categorical value and assign it to a numeric value between 0 and 3
-
-    Args:
-        row (int): The DataFrame row
-
-    Returns:
-        int: A numeric value
-    """
-    if row['class_name'] == 'no_tumor':
+    if row['label_name'] == 'no_tumor':
         return 0
-    elif row['class_name'] == 'glioma_tumor':
+    elif row['label_name'] == 'glioma_tumor':
         return 1
-    elif row['class_name'] == 'meningioma_tumor':
+    elif row['label_name'] == 'meningioma_tumor':
         return 2
     else:
         return 3
@@ -78,7 +65,7 @@ def label_class(row):
 images_dir = './data/Training'
 
 # Create a dataframe to store the values of the features of each image
-df = pd.DataFrame(columns = ('image_name', 'mean', 'variance', 'std', 'skewness', 'kurtosis', 'entropy','contrast', 'dissimilarity', 'homogeneity', 'asm', 'energy', 'correlation', 'class_name'))
+df = pd.DataFrame(columns = ('image_name', 'mean', 'variance', 'std', 'skewness', 'kurtosis', 'entropy','contrast', 'dissimilarity', 'homogeneity', 'asm', 'energy', 'correlation', 'label_name'))
 
 # A variable to iterate with
 image_num = 1
@@ -86,10 +73,11 @@ image_num = 1
 # For loops to iterate between each image of the folders
 for classes in os.listdir(images_dir):
     for images in os.listdir(images_dir + '/' + classes):
+        # Image path
         inputfile = images_dir + '/' + classes + '/' + images
         
         # Call features_extraction function and save the features values in a variable
-        features = features_extraction(inputfile)
+        features = get_image_features(inputfile)
         
         # Assign each feature value into its variable
         (mean, variance, std, skewness, kurtos, entro,contrast, dissimilarity, homogeneity, asm, energy, correlation) = features
@@ -100,7 +88,7 @@ for classes in os.listdir(images_dir):
         image_num += 1
 
 # Apply the label_class function into each row of the dataframe      
-df['class'] = df.apply(lambda row: label_class(row), axis = 1)
+df['label'] = df.apply(lambda row: label_class(row), axis = 1)
 
 # Shuffle the rows in the dataframe
 df = df.sample(frac=1).reset_index(drop=True)
