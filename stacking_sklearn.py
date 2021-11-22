@@ -28,12 +28,12 @@ def get_stacking():
     # define meta learner model
     level1 = KNeighborsClassifier(n_neighbors = 5)
     # define the stacking ensemble
-    model = StackingClassifier(estimators=level0, final_estimator=level1, cv=5)
+    model = StackingClassifier(estimators=level0, final_estimator=level1, cv=4)
     return model
 
 # evaluate a given model using cross-validation
 def evaluate_model(model, x, y):
-    cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3)
+    cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=4)
     scores = cross_val_score(model, x, y, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
     return scores
 

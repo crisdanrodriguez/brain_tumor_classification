@@ -2,13 +2,14 @@
 import pandas as pd
 import numpy as np
 from skimage import io
-from skimage.io import imread
+from skimage.io import imread, imshow
 from skimage.transform import resize
 from skimage.feature import greycomatrix, greycoprops
 from scipy.stats import mode, kurtosis, skew, entropy
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from collections import Counter
+import matplotlib.pyplot as plt
 
 """
 Features Extraction Function
@@ -261,6 +262,8 @@ y_train = train.iloc[:, -1].values
 x_test = test.iloc[:, :-1].values
 y_test = test.iloc[:, -1].values
 
+print('Training...')
+
 knn_preds = knn_predict(x_train, y_train, x_train, n_neighbors = 5)
 knn_tests = knn_predict(x_train, y_train, x_test, n_neighbors = 5)
 
@@ -311,7 +314,7 @@ acc_knn = []
 acc_nb = []
 acc_dts = []
 acc_s = []
-for i in range(1):
+for i in range(2):
     train, test = train_test_split(dataset, test_size = 0.2)
 
     x_train = train.iloc[:, :-1].values
@@ -366,7 +369,20 @@ while True:
     print('NB: '  + str(nb_x[0]))
     print('DT: '  + str(dts_x[0]))
     print('Stacking: ' + str(s_x[0]))
+
+    if s_x[0] == 0:
+        print('Prediction = No tumor')
+    elif s_x[0] == 1:
+        print('Prediction = Glioma tumor')
+    elif s_x[0] == 2:
+        print('Prediction = Meningioma tumor')
+    else:
+        print('Prediction = Pituitary tumor')
+    
     print('\n')
 
 
-# data/Testing/glioma_tumor/gt_83.jpg
+# data/Testing/no_tumor/
+# data/Testing/glioma_tumor/
+# data/Testing/meningioma_tumor/
+# data/Testing/pituitary_tumor/
