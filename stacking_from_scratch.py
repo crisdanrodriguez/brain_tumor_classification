@@ -309,12 +309,12 @@ s_tests = knn_predict(x_train_mm, y_train_mm, x_test_s, n_neighbors = 5)
 
 #print('Stacking: %.4f' % (accuracy_score(y_test_s, s_tests)))
 
-# Cross Validation
+#Cross Validation
 acc_knn = []
 acc_nb = []
 acc_dts = []
 acc_s = []
-for i in range(2):
+for i in range(4):
     train, test = train_test_split(dataset, test_size = 0.2)
 
     x_train = train.iloc[:, :-1].values
