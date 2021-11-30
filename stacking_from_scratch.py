@@ -11,6 +11,7 @@ from sklearn.metrics import accuracy_score
 from collections import Counter
 import matplotlib.pyplot as plt
 
+
 """
 Features Extraction Function
 """
@@ -51,6 +52,7 @@ def get_image_features(image_path):
     
     # Returns all the features values of the image
     return mean, variance, std, skewness, kurtos, entro, contrast, dissimilarity, homogeneity, asm, energy, correlation
+
 
 """
 K-Nearest Neighbors Algorithm Functions
@@ -95,6 +97,7 @@ def knn_predict(x_train, y_train, x_input, n_neighbors):
     # Returns a list with the predictions
     return predictions
 
+
 """
 Decision Trees Algorithm Functions
 """
@@ -136,7 +139,7 @@ class DecisionTree:
         n_samples, n_features = X.shape
         n_labels = len(np.unique(y))
 
-        # stopping criteria
+        # Stopping criteria
         if (
             depth >= self.max_depth
             or n_labels == 1
@@ -147,10 +150,10 @@ class DecisionTree:
 
         feat_idxs = np.random.choice(n_features, self.n_feats, replace=False)
 
-        # greedily select the best split according to information gain
+        # Greedily select the best split according to information gain
         best_feat, best_thresh = self._best_criteria(X, y, feat_idxs)
 
-        # grow the children that result from the split
+        # Grow the children that result from the split
         left_idxs, right_idxs = self._split(X[:, best_feat], best_thresh)
         left = self._grow_tree(X[left_idxs, :], y[left_idxs], depth + 1)
         right = self._grow_tree(X[right_idxs, :], y[right_idxs], depth + 1)
@@ -173,22 +176,22 @@ class DecisionTree:
         return split_idx, split_thresh
 
     def _information_gain(self, y, X_column, split_thresh):
-        # parent loss
+        # Parent loss
         parent_entropy = entropy(y)
 
-        # generate split
+        # Generate split
         left_idxs, right_idxs = self._split(X_column, split_thresh)
 
         if len(left_idxs) == 0 or len(right_idxs) == 0:
             return 0
 
-        # compute the weighted avg. of the loss for the children
+        # Compute the weighted avgerage of the loss for the children
         n = len(y)
         n_l, n_r = len(left_idxs), len(right_idxs)
         e_l, e_r = entropy(y[left_idxs]), entropy(y[right_idxs])
         child_entropy = (n_l / n) * e_l + (n_r / n) * e_r
 
-        # information gain is difference in loss before vs. after split
+        # Information gain is difference in loss before vs. after split
         ig = parent_entropy - child_entropy
         return ig
 
@@ -209,6 +212,7 @@ class DecisionTree:
         counter = Counter(y)
         most_common = counter.most_common(1)[0][0]
         return most_common
+
 
 """
 Naive Bayes Algorithm Functions
@@ -250,52 +254,52 @@ def nb_predict(df, x_input, class_column):
         
     return predictions
 
+
+# Read CSV file into DataFrame
 dataset = pd.read_csv('data/brain_tumor_dataset.csv', index_col = 0)
 
+# Drop irrelevant features
 dataset = dataset.drop(['image_name', 'label_name'], axis = 1)
 
+# Split data into training and testing 
 train, test = train_test_split(dataset, test_size = 0.2)
-
 x_train = train.iloc[:, :-1].values
 y_train = train.iloc[:, -1].values
-
 x_test = test.iloc[:, :-1].values
 y_test = test.iloc[:, -1].values
 
 print('Training...')
 
+# Train and predict for KNN model
 knn_preds = knn_predict(x_train, y_train, x_train, n_neighbors = 5)
 knn_tests = knn_predict(x_train, y_train, x_test, n_neighbors = 5)
 
+# Train and predict for NB model
 nb_preds = nb_predict(train, x_train, class_column = 'label')
 nb_tests = nb_predict(train, x_test, class_column = 'label')
 
+# Train and predict for DTs model
 dt = DecisionTree(max_depth = 7)
 dt.fit(x_train, y_train)
 dts_preds = dt.predict(x_train)
 dts_tests = dt.predict(x_test)
 
-#print('KNN: %.4f' % (accuracy_score(y_test, knn_tests)))
-#print('NB: %.4f' % (accuracy_score(y_test, nb_tests)))
-#print('DT: %.4f' % (accuracy_score(y_test, dts_tests)))
-
+# Create second level dataframe for meta model training with models predictions
 meta_model_df = pd.DataFrame(columns = ('knn', 'dts', 'nb', 'true_label'))
-
 meta_model_df['knn'] = knn_preds
 meta_model_df['dts'] = dts_preds
 meta_model_df['nb'] = nb_preds
 meta_model_df['true_label'] = y_train
 
+# Divide second level data into training and testing
 train_mm, test_mm = train_test_split(meta_model_df, test_size = 0.2)
-
 x_train_mm = train_mm.iloc[:, :-1].values
 y_train_mm = train_mm.iloc[:, -1].values
-
 x_test_mm = test_mm.iloc[:, :-1].values
 y_test_mm = test_mm.iloc[:, -1].values
 
+# Create dataframe for testing stacking model
 stacking_test = pd.DataFrame(columns = ('knn', 'dts', 'nb', 'true_label'))
-
 stacking_test['knn'] = knn_tests
 stacking_test['dts'] = dts_tests
 stacking_test['nb'] = nb_tests
@@ -304,12 +308,11 @@ stacking_test['true_label'] = y_test
 x_test_s = stacking_test.iloc[:, :-1].values
 y_test_s = stacking_test.iloc[:, -1].values
 
+# Train and test meta model
 knn_tests2 = knn_predict(x_train_mm, y_train_mm, x_test_mm, n_neighbors = 5)
 s_tests = knn_predict(x_train_mm, y_train_mm, x_test_s, n_neighbors = 5)
 
-#print('Stacking: %.4f' % (accuracy_score(y_test_s, s_tests)))
-
-#Cross Validation
+# Determine models accuracy with cross validation
 acc_knn = []
 acc_nb = []
 acc_dts = []
@@ -342,12 +345,14 @@ for i in range(4):
     acc_nb.append(accuracy_score(y_test, nb_test))
     acc_dts.append(accuracy_score(y_test, dts_test))
     acc_s.append(accuracy_score(y_test, s_test))
-    
+
+# Print models accuracies
 print('KNN: %.4f' % (np.mean(acc_knn)))
 print('NB: %.4f' % (np.mean(acc_nb)))
 print('DT: %.4f' % (np.mean(acc_dts)))
 print('Stacking: %.4f' % (np.mean(acc_s)))
 
+# Create new predictions
 print('-------')
 print('New prediction')
 
@@ -380,9 +385,3 @@ while True:
         print('Prediction = Pituitary tumor')
     
     print('\n')
-
-
-# data/Testing/no_tumor/
-# data/Testing/glioma_tumor/
-# data/Testing/meningioma_tumor/
-# data/Testing/pituitary_tumor/
