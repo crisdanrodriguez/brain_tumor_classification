@@ -10,7 +10,7 @@
 
 A machine learning project for brain tumor classification using the **Stacking ensemble method**. This project compares stacking implementations (from scratch vs. scikit-learn) and extracts image features using texture analysis.
 
-## 📋 Table of Contents
+## Table of Contents
 - [Overview](#overview)
 - [Dataset](#dataset)
 - [Features](#features)
