@@ -103,12 +103,6 @@ jupyter notebook EDA.ipynb
 ```
 Interactive analysis of the dataset and feature distributions.
 
-### 5. Run Tests
-```bash
-python test_basic.py
-```
-Run basic functionality tests to ensure everything works correctly.
-
 ## 📂 Project Structure
 ```
 brain_tumor_classification/
