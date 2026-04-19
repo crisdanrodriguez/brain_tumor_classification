@@ -41,6 +41,7 @@ env/
 # Data
 *.csv
 data/*.csv
+!data/brain_tumor_dataset.csv
 data/Training/
 data/Testing/
 
