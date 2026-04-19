@@ -33,14 +33,17 @@ env/
 *.swo
 *~
 .DS_Store
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Jupyter Notebook
 .ipynb_checkpoints
 *.ipynb_checkpoints
 
 # Data
-*.csv
-data/*.csv
 !data/brain_tumor_dataset.csv
 data/Training/
 data/Testing/
