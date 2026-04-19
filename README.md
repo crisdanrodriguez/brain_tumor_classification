@@ -1,8 +1,9 @@
 # Brain Tumor Classification
 
-[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-111111.svg)](./LICENSE)
-[![Tests](https://github.com/crisdanrodriguez/brain_tumor_classification/actions/workflows/tests.yml/badge.svg)](https://github.com/crisdanrodriguez/brain_tumor_classification/actions/workflows/tests.yml)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-0A66C2?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.5%2B-0A66C2?style=flat-square&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![Tests](https://img.shields.io/github/actions/workflow/status/crisdanrodriguez/brain_tumor_classification/tests.yml?style=flat-square&logo=githubactions&logoColor=white&label=Tests)](https://github.com/crisdanrodriguez/brain_tumor_classification/actions/workflows/tests.yml)
+[![License](https://img.shields.io/badge/License-MIT-0A66C2?style=flat-square&logo=opensourceinitiative&logoColor=white)](./LICENSE)
 
 Handcrafted texture-feature extraction and stacking-based brain tumor classification on MRI images.
 
