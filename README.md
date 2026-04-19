@@ -21,9 +21,8 @@ A machine learning project for brain tumor classification using the **Stacking e
 - [Results](#results)
 - [Documentation](#documentation)
 - [License](#license)
-- [Contact](#contact)
 
-## 🎯 Overview
+## Overview
 
 This project implements brain tumor classification using:
 - **Texture feature extraction** (GLCM, first-order statistics)
@@ -33,7 +32,7 @@ This project implements brain tumor classification using:
 
 The stacking method combines weak learners (level 0) with a meta-learner (level 1) to improve classification performance.
 
-## 📁 Dataset
+## Dataset
 
 The dataset includes MRI brain images classified into 4 categories:
 - **Glioma Tumor**
@@ -47,7 +46,7 @@ The dataset includes MRI brain images classified into 4 categories:
 
 CSV file format: `brain_tumor_dataset.csv` with extracted features
 
-## 🔧 Features
+## Features
 
 ### Texture Features Extracted:
 1. **First-order statistics:**
@@ -58,7 +57,7 @@ CSV file format: `brain_tumor_dataset.csv` with extracted features
    - Contrast, Dissimilarity, Homogeneity
    - Angular Second Moment (ASM), Energy, Correlation
 
-## 💻 Installation
+## Installation
 
 ### Prerequisites
 - Python 3.8 or higher
@@ -78,7 +77,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## 🚀 Usage
+## Usage
 
 ### 1. Extract Features from Images
 ```bash
@@ -104,7 +103,7 @@ jupyter notebook EDA.ipynb
 ```
 Interactive analysis of the dataset and feature distributions.
 
-## 📂 Project Structure
+## Project Structure
 ```
 brain_tumor_classification/
 ├── README.md                                    # This file
@@ -141,7 +140,7 @@ brain_tumor_classification/
 └── Brain Tumor Classification with Stacking Method.pdf  # Detailed documentation
 ```
 
-## 📊 Results
+## Results
 
 The stacking method combines:
 - **Base Learners (Level 0):** KNN (k=5), Decision Tree (depth=7), Gaussian Naive Bayes
@@ -152,7 +151,7 @@ Model performance is evaluated using accuracy scores across all models.
 
 For detailed results and comparisons, see the [full documentation](https://github.com/crisdanrodriguez/brain_tumor_classification/blob/main/Brain%20Tumor%20Classification%20with%20Stacking%20Method.pdf).
 
-## 🧪 Testing
+## Testing
 
 Run the basic test suite to ensure all components work correctly:
 ```bash
@@ -164,13 +163,13 @@ Tests include:
 - Basic functionality checks
 - Model instantiation tests
 
-## 📚 Documentation
+## Documentation
 
 - `Brain Tumor Classification with Stacking Method.pdf` - Comprehensive technical documentation
 - `BTC_presentation.pptx` - Project presentation
 - `EDA.ipynb` - Jupyter notebook with data analysis
 - **[Towards AI Publication](https://towardsai.net/p/l/stacking-ensemble-method-for-brain-tumor-classification-performance-analysis)** - Article about this project
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
