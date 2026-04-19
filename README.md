@@ -1,7 +1,7 @@
 # Brain Tumor Classification with Stacking Method
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Tests](https://github.com/crisdanrodriguez/brain_tumor_classification/workflows/Tests/badge.svg)](https://github.com/crisdanrodriguez/brain_tumor_classification/actions)
 
 <p align="center">
@@ -61,7 +61,7 @@ CSV file format: `brain_tumor_dataset.csv` with extracted features
 ## 💻 Installation
 
 ### Prerequisites
-- Python 3.7 or higher
+- Python 3.8 or higher
 - pip or Anaconda
 
 ### Setup
