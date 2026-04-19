@@ -6,7 +6,7 @@ from skimage import io
 from skimage.io import imread
 from skimage.transform import resize
 from skimage.transform import resize
-from skimage.feature import greycomatrix, greycoprops
+from skimage.feature import graycomatrix as greycomatrix, graycoprops as greycoprops
 from scipy.stats import kurtosis, skew, entropy
 
 
@@ -87,13 +87,14 @@ for classes in os.listdir(images_dir):
         
         image_num += 1
 
-# Apply the label_class function into each row of the dataframe      
-df['label'] = df.apply(lambda row: label_class(row), axis = 1)
+if __name__ == "__main__":
+    # Apply the label_class function into each row of the dataframe      
+    df['label'] = df.apply(lambda row: label_class(row), axis = 1)
 
-# Shuffle the rows in the dataframe
-df = df.sample(frac=1).reset_index(drop=True)
+    # Shuffle the rows in the dataframe
+    df = df.sample(frac=1).reset_index(drop=True)
 
-# Return a csv file with the dataframe
-df.to_csv('data/brain_tumor_dataset.csv')
+    # Return a csv file with the dataframe
+    df.to_csv('data/brain_tumor_dataset.csv')
 
-print('Ready')
+    print('Ready')

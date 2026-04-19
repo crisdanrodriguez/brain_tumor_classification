@@ -4,7 +4,7 @@ import numpy as np
 from skimage import io
 from skimage.io import imread, imshow
 from skimage.transform import resize
-from skimage.feature import greycomatrix, greycoprops
+from skimage.feature import graycomatrix as greycomatrix, graycoprops as greycoprops
 from scipy.stats import mode, kurtosis, skew, entropy
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
@@ -91,7 +91,7 @@ def knn_predict(x_train, y_train, x_input, n_neighbors):
         labels = y_train[dist_sorted]
          
         # Determine the majority label in labels
-        label = mode(labels).mode[0] 
+        label = mode(labels).mode
         predictions.append(label)
         
     # Returns a list with the predictions
@@ -258,130 +258,131 @@ def nb_predict(df, x_input, class_column):
 # Read CSV file into DataFrame
 dataset = pd.read_csv('data/brain_tumor_dataset.csv', index_col = 0)
 
-# Drop irrelevant features
-dataset = dataset.drop(['image_name', 'label_name'], axis = 1)
+if __name__ == "__main__":
+    # Drop irrelevant features
+    dataset = dataset.drop(['image_name', 'label_name'], axis = 1)
 
-# Split data into training and testing 
-train, test = train_test_split(dataset, test_size = 0.2)
-x_train = train.iloc[:, :-1].values
-y_train = train.iloc[:, -1].values
-x_test = test.iloc[:, :-1].values
-y_test = test.iloc[:, -1].values
-
-print('Training...')
-
-# Train and predict for KNN model
-knn_preds = knn_predict(x_train, y_train, x_train, n_neighbors = 5)
-knn_tests = knn_predict(x_train, y_train, x_test, n_neighbors = 5)
-
-# Train and predict for NB model
-nb_preds = nb_predict(train, x_train, class_column = 'label')
-nb_tests = nb_predict(train, x_test, class_column = 'label')
-
-# Train and predict for DTs model
-dt = DecisionTree(max_depth = 7)
-dt.fit(x_train, y_train)
-dts_preds = dt.predict(x_train)
-dts_tests = dt.predict(x_test)
-
-# Create second level dataframe for meta model training with models predictions
-meta_model_df = pd.DataFrame(columns = ('knn', 'dts', 'nb', 'true_label'))
-meta_model_df['knn'] = knn_preds
-meta_model_df['dts'] = dts_preds
-meta_model_df['nb'] = nb_preds
-meta_model_df['true_label'] = y_train
-
-# Divide second level data into training and testing
-train_mm, test_mm = train_test_split(meta_model_df, test_size = 0.2)
-x_train_mm = train_mm.iloc[:, :-1].values
-y_train_mm = train_mm.iloc[:, -1].values
-x_test_mm = test_mm.iloc[:, :-1].values
-y_test_mm = test_mm.iloc[:, -1].values
-
-# Create dataframe for testing stacking model
-stacking_test = pd.DataFrame(columns = ('knn', 'dts', 'nb', 'true_label'))
-stacking_test['knn'] = knn_tests
-stacking_test['dts'] = dts_tests
-stacking_test['nb'] = nb_tests
-stacking_test['true_label'] = y_test
-
-x_test_s = stacking_test.iloc[:, :-1].values
-y_test_s = stacking_test.iloc[:, -1].values
-
-# Train and test meta model
-knn_tests2 = knn_predict(x_train_mm, y_train_mm, x_test_mm, n_neighbors = 5)
-s_tests = knn_predict(x_train_mm, y_train_mm, x_test_s, n_neighbors = 5)
-
-# Determine models accuracy with cross validation
-acc_knn = []
-acc_nb = []
-acc_dts = []
-acc_s = []
-for i in range(4):
+    # Split data into training and testing 
     train, test = train_test_split(dataset, test_size = 0.2)
-
     x_train = train.iloc[:, :-1].values
     y_train = train.iloc[:, -1].values
-
     x_test = test.iloc[:, :-1].values
     y_test = test.iloc[:, -1].values
-    
-    knn_test = knn_predict(x_train, y_train, x_test, n_neighbors = 5)
-    nb_test = nb_predict(train, x_test, class_column = 'label')
-    
-    dts_test = dt.predict(x_test)
-    
+
+    print('Training...')
+
+    # Train and predict for KNN model
+    knn_preds = knn_predict(x_train, y_train, x_train, n_neighbors = 5)
+    knn_tests = knn_predict(x_train, y_train, x_test, n_neighbors = 5)
+
+    # Train and predict for NB model
+    nb_preds = nb_predict(train, x_train, class_column = 'label')
+    nb_tests = nb_predict(train, x_test, class_column = 'label')
+
+    # Train and predict for DTs model
+    dt = DecisionTree(max_depth = 7)
+    dt.fit(x_train, y_train)
+    dts_preds = dt.predict(x_train)
+    dts_tests = dt.predict(x_test)
+
+    # Create second level dataframe for meta model training with models predictions
+    meta_model_df = pd.DataFrame(columns = ('knn', 'dts', 'nb', 'true_label'))
+    meta_model_df['knn'] = knn_preds
+    meta_model_df['dts'] = dts_preds
+    meta_model_df['nb'] = nb_preds
+    meta_model_df['true_label'] = y_train
+
+    # Divide second level data into training and testing
+    train_mm, test_mm = train_test_split(meta_model_df, test_size = 0.2)
+    x_train_mm = train_mm.iloc[:, :-1].values
+    y_train_mm = train_mm.iloc[:, -1].values
+    x_test_mm = test_mm.iloc[:, :-1].values
+    y_test_mm = test_mm.iloc[:, -1].values
+
+    # Create dataframe for testing stacking model
     stacking_test = pd.DataFrame(columns = ('knn', 'dts', 'nb', 'true_label'))
-    stacking_test['knn'] = knn_test
-    stacking_test['dts'] = dts_test
-    stacking_test['nb'] = nb_test
+    stacking_test['knn'] = knn_tests
+    stacking_test['dts'] = dts_tests
+    stacking_test['nb'] = nb_tests
     stacking_test['true_label'] = y_test
-    
+
     x_test_s = stacking_test.iloc[:, :-1].values
-    
-    s_test = knn_predict(x_train_mm, y_train_mm, x_test_s, n_neighbors = 5)
+    y_test_s = stacking_test.iloc[:, -1].values
 
-    acc_knn.append(accuracy_score(y_test, knn_test))
-    acc_nb.append(accuracy_score(y_test, nb_test))
-    acc_dts.append(accuracy_score(y_test, dts_test))
-    acc_s.append(accuracy_score(y_test, s_test))
+    # Train and test meta model
+    knn_tests2 = knn_predict(x_train_mm, y_train_mm, x_test_mm, n_neighbors = 5)
+    s_tests = knn_predict(x_train_mm, y_train_mm, x_test_s, n_neighbors = 5)
 
-# Print models accuracies
-print('KNN: %.4f' % (np.mean(acc_knn)))
-print('NB: %.4f' % (np.mean(acc_nb)))
-print('DT: %.4f' % (np.mean(acc_dts)))
-print('Stacking: %.4f' % (np.mean(acc_s)))
+    # Determine models accuracy with cross validation
+    acc_knn = []
+    acc_nb = []
+    acc_dts = []
+    acc_s = []
+    for i in range(4):
+        train, test = train_test_split(dataset, test_size = 0.2)
 
-# Create new predictions
-print('-------')
-print('New prediction')
+        x_train = train.iloc[:, :-1].values
+        y_train = train.iloc[:, -1].values
 
-while True:
-    new_image = input('Image path: ')
+        x_test = test.iloc[:, :-1].values
+        y_test = test.iloc[:, -1].values
+        
+        knn_test = knn_predict(x_train, y_train, x_test, n_neighbors = 5)
+        nb_test = nb_predict(train, x_test, class_column = 'label')
+        
+        dts_test = dt.predict(x_test)
+        
+        stacking_test = pd.DataFrame(columns = ('knn', 'dts', 'nb', 'true_label'))
+        stacking_test['knn'] = knn_test
+        stacking_test['dts'] = dts_test
+        stacking_test['nb'] = nb_test
+        stacking_test['true_label'] = y_test
+        
+        x_test_s = stacking_test.iloc[:, :-1].values
+        
+        s_test = knn_predict(x_train_mm, y_train_mm, x_test_s, n_neighbors = 5)
 
-    features = np.array([get_image_features(new_image)])
+        acc_knn.append(accuracy_score(y_test, knn_test))
+        acc_nb.append(accuracy_score(y_test, nb_test))
+        acc_dts.append(accuracy_score(y_test, dts_test))
+        acc_s.append(accuracy_score(y_test, s_test))
 
-    knn_x = knn_predict(x_train, y_train, features, n_neighbors = 5)
-    dts_x = dt.predict(features)
-    nb_x = nb_predict(train, features, class_column = 'label')
+    # Print models accuracies
+    print('KNN: %.4f' % (np.mean(acc_knn)))
+    print('NB: %.4f' % (np.mean(acc_nb)))
+    print('DT: %.4f' % (np.mean(acc_dts)))
+    print('Stacking: %.4f' % (np.mean(acc_s)))
 
-    new_p = np.array([[knn_x[0], dts_x[0], nb_x[0]]])
+    # Create new predictions
+    print('-------')
+    print('New prediction')
 
-    s_x = knn_predict(x_train_mm, y_train_mm, new_p, n_neighbors = 5)
+    while True:
+        new_image = input('Image path: ')
 
-    print('No tumor = 0, Glioma tumor = 1, Meningioma tumor = 2, Pituitary tumor = 3')
-    print('KNN: '  + str(knn_x[0]))
-    print('NB: '  + str(nb_x[0]))
-    print('DT: '  + str(dts_x[0]))
-    print('Stacking: ' + str(s_x[0]))
+        features = np.array([get_image_features(new_image)])
 
-    if s_x[0] == 0:
-        print('Prediction = No tumor')
-    elif s_x[0] == 1:
-        print('Prediction = Glioma tumor')
-    elif s_x[0] == 2:
-        print('Prediction = Meningioma tumor')
-    else:
-        print('Prediction = Pituitary tumor')
-    
-    print('\n')
+        knn_x = knn_predict(x_train, y_train, features, n_neighbors = 5)
+        dts_x = dt.predict(features)
+        nb_x = nb_predict(train, features, class_column = 'label')
+
+        new_p = np.array([[knn_x[0], dts_x[0], nb_x[0]]])
+
+        s_x = knn_predict(x_train_mm, y_train_mm, new_p, n_neighbors = 5)
+
+        print('No tumor = 0, Glioma tumor = 1, Meningioma tumor = 2, Pituitary tumor = 3')
+        print('KNN: '  + str(knn_x[0]))
+        print('NB: '  + str(nb_x[0]))
+        print('DT: '  + str(dts_x[0]))
+        print('Stacking: ' + str(s_x[0]))
+
+        if s_x[0] == 0:
+            print('Prediction = No tumor')
+        elif s_x[0] == 1:
+            print('Prediction = Glioma tumor')
+        elif s_x[0] == 2:
+            print('Prediction = Meningioma tumor')
+        else:
+            print('Prediction = Pituitary tumor')
+        
+        print('\n')
