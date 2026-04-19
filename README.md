@@ -2,6 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![Tests](https://github.com/crisdanrodriguez/brain_tumor_classification/workflows/Tests/badge.svg)](https://github.com/crisdanrodriguez/brain_tumor_classification/actions)
 
 <p align="center">
   <img src="implementation_diagram.png" alt="Implementation Diagram" width="600">
@@ -109,7 +110,6 @@ brain_tumor_classification/
 ├── README.md                                    # This file
 ├── test_basic.py                                # Basic functionality tests
 ├── LICENSE                                      # MIT License
-├── CONTRIBUTING.md                              # Contribution guidelines
 │
 ├── features_extraction.py                       # Feature extraction from images
 ├── stacking_sklearn.py                          # Stacking with scikit-learn
@@ -128,6 +128,13 @@ brain_tumor_classification/
 │       ├── meningioma_tumor/
 │       ├── no_tumor/
 │       └── pituitary_tumor/
+│
+├── .github/
+│   ├── workflows/tests.yml                      # CI/CD pipeline
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md                        # Bug report template
+│   │   └── feature_request.md                   # Feature request template
+│   └── PULL_REQUEST_TEMPLATE.md                 # PR template
 │
 ├── implementation_diagram.png                   # Architecture diagram
 ├── BTC_presentation.pptx                        # Presentation slides

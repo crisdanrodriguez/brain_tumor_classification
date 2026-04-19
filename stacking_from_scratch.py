@@ -255,10 +255,10 @@ def nb_predict(df, x_input, class_column):
     return predictions
 
 
-# Read CSV file into DataFrame
-dataset = pd.read_csv('data/brain_tumor_dataset.csv', index_col = 0)
-
 if __name__ == "__main__":
+    # Read CSV file into DataFrame
+    dataset = pd.read_csv('data/brain_tumor_dataset.csv', index_col = 0)
+
     # Drop irrelevant features
     dataset = dataset.drop(['image_name', 'label_name'], axis = 1)
 

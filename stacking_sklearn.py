@@ -44,23 +44,24 @@ def evaluate_model(model, x, y):
     scores = cross_val_score(model, x, y, scoring = 'accuracy', cv = cv, n_jobs = -1, error_score = 'raise')
     return scores
 
-# Read CSV file into DataFrame
-dataset = pd.read_csv('data/brain_tumor_dataset.csv', index_col = 0)
+if __name__ == "__main__":
+    # Read CSV file into DataFrame
+    dataset = pd.read_csv('data/brain_tumor_dataset.csv', index_col = 0)
 
-# Drop irrelevant features
-dataset = dataset.drop(['image_name', 'label_name'], axis = 1)
+    # Drop irrelevant features
+    dataset = dataset.drop(['image_name', 'label_name'], axis = 1)
 
-# Split data into training and testing 
-x = dataset.iloc[:, :-1].values
-y = dataset.iloc[:, -1].values
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2)
+    # Split data into training and testing 
+    x = dataset.iloc[:, :-1].values
+    y = dataset.iloc[:, -1].values
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2)
 
-models = get_models()
-results, names = list(), list()
+    models = get_models()
+    results, names = list(), list()
 
-# Determine accuracies for each model
-for name, model in models.items():
-    scores = evaluate_model(model, x, y)
-    results.append(scores)
-    names.append(name)
-    print('>%s %.4f' % (name, np.mean(scores)))
+    # Determine accuracies for each model
+    for name, model in models.items():
+        scores = evaluate_model(model, x, y)
+        results.append(scores)
+        names.append(name)
+        print('>%s %.4f' % (name, np.mean(scores)))
