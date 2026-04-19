@@ -1,8 +1,8 @@
 # Brain Tumor Classification
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Tests](https://github.com/crisdanrodriguez/brain_tumor_classification/actions/workflows/tests.yml/badge.svg)](https://github.com/crisdanrodriguez/brain_tumor_classification/actions/workflows/tests.yml)
 [![License](https://img.shields.io/badge/license-MIT-111111.svg)](./LICENSE)
+[![Tests](https://github.com/crisdanrodriguez/brain_tumor_classification/actions/workflows/tests.yml/badge.svg)](https://github.com/crisdanrodriguez/brain_tumor_classification/actions/workflows/tests.yml)
 
 Handcrafted texture-feature extraction and stacking-based brain tumor classification on MRI images.
 
@@ -28,10 +28,10 @@ This repository is a machine learning and applied data science project focused o
 
 The project works with engineered image features instead of deep learning. It includes:
 
-- a feature extraction pipeline based on first-order statistics and GLCM texture descriptors
-- a stacking implementation built with `scikit-learn`
-- a manual stacking implementation that recreates the ensemble logic from scratch
-- an exploratory notebook for analysis of the engineered dataset
+- A feature extraction pipeline based on first-order statistics and GLCM texture descriptors
+- A stacking implementation built with `scikit-learn`
+- A manual stacking implementation that recreates the ensemble logic from scratch
+- An exploratory notebook for analysis of the engineered dataset
 
 The repository currently contains the image dataset under [`data/`](./data), the derived feature table at [`data/brain_tumor_dataset.csv`](./data/brain_tumor_dataset.csv), the Python package under [`src/`](./src), complementary material under [`docs/`](./docs), and basic automated tests under [`tests/`](./tests).
 
