@@ -32,6 +32,8 @@ This project implements brain tumor classification using:
 
 The stacking method combines weak learners (level 0) with a meta-learner (level 1) to improve classification performance.
 
+This project leverages AI-assisted development tools to enhance code quality, documentation, and project structure. AI was instrumental in optimizing the implementation, improving error handling, generating comprehensive documentation, and ensuring best practices for maintainable and collaborative code.
+
 ## Dataset
 
 The dataset includes MRI brain images classified into 4 categories:
