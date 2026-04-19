@@ -1,7 +1,7 @@
 # Brain Tumor Classification with Stacking Method
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/crisdanrodriguez/brain_tumor_classification/workflows/Tests/badge.svg)](https://github.com/crisdanrodriguez/brain_tumor_classification/actions)
 
 <p align="center">
@@ -107,7 +107,7 @@ Interactive analysis of the dataset and feature distributions.
 
 ## Project Structure
 ```
-brain_tumor_classification/
+brain-tumor-classification/
 ├── README.md                                    # This file
 ├── test_basic.py                                # Basic functionality tests
 ├── LICENSE                                      # MIT License
